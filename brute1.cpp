@@ -1,96 +1,70 @@
 #include <iostream>
 #include <vector>
-using namespace std;
-void output(long long a[100][100], int n);
-void exponent(long long a[100][100], long long res[100][100], int n, long long l);
+#include <map>
 
-#define MOD 1000000007
+using namespace std;
 int main()
 { 
-  int n, m, u, v;
-  long long l;
-  cin >> n >> m >> u >> v >> l;
-  u--, v--;
-  long long  a[100][100] = {0}; //adjacency_matrix
-  long long res[100][100] = {0};
-  for(int i = 0; i < m; i++)
+  int n, A, B, u, v;
+  long long m, c;
+  cin >> n >> m; 
+   
+  vector<bool> visited(n,0);
+  vector<long long> weight(n,1000000000);
+  vector<map<int, long long>> g(n);  // вектор map'ов: каждая вершина -- контейнер ключ-значение. ключ -- вершина, в которую ребро, значение -- вес ребра
+  map<int, long long>::iterator it; //итератор
+  
+  
+  //ввод ребер
+  for(long i = 0; i < m; i++) 
   {
-     int A,B;
-     cin >> A >> B;
-     A--;
-     B--;
-     if(A == B)
-     {
-		 a[A][B] += 2;
-		 res[A][B] += 2;
-	 }
-	 else
-	 {
-         a[A][B]++;
-         a[B][A]++;
-         res[A][B]++;
-         res[B][A]++;
-     }
+    cin >> A >> B >> c;
+    A--; B--;
+    it = g[A].find(B);
+    if(it == g[A].end())
+    {
+		g[A].insert(make_pair(B, c));
+		g[B].insert(make_pair(A, c));
+	}
+	else if(it->second > c)
+	{
+		it->second = c;
+		it = g[B].find(A);
+		it->second = c;
+	}
   }
-    //output(a, n);
-    exponent(a,res,n,l);
-	
-    //output(res, n);
-    cout << res[u][v]; 
+  
+  cin >> u >> v;
+  u--; v--;	   
+  weight[u] = 0;
+  int counter = 0;
+  
+  while(counter < n)
+  {
+	  long long min = 1000000000000;
+	  counter++;
+	  int index_min = -1;
+	 
+		  for(int i = 0; i < n; i++)
+		  {
+			  if((weight[i] < min) && !visited[i])
+			  {
+				  min = weight[i];
+				  index_min = i;
+			  }
+		  }
+		  it = g[index_min].begin();
+		  for(int i = 0; it != g[index_min].end(), i < signed(g[index_min].size()); i++, it++)
+		  {
+			  if(!visited[index_min] && index_min != i) // !visited[index_min] && (index_min != i) && (weight[index_min] + g[index_min][i] < weight[i])
+			  {
+				                                    // weight[i] = weight[index_min] + g[index_min][i];
+			  }
+		  }
+		  visited[index_min] = 1;
+	  
+  }
+  
+  cout << weight[v];
   return 0;
-}
-
-void exponent(long long a[100][100], long long res[100][100], int n, long long l)
-{
-	long long t[100][100];
-	for(int i = 0; i < n; i++)
-	{
-		for(int j = 0; j < n; j++)
-		{
-			t[i][j] = res[i][j];
-		}
-	}
-	for(int k = 0; k < l - 1; k++)
-	{
-		for(int i = 0; i < n; i++)
-		{
-            for(int j = 0; j < n; j++)
-            {   
-				long long tmp = 0;
-				for(int m = 0; m < n; m++)
-				{
-             			tmp = (tmp +  ( (a[i][m] % MOD) * (res[m][j] % MOD) ) % MOD) % MOD;
-                }
-                t[i][j] = tmp;
-            }
-		}
-		
-   	    for(int i = 0; i < n; i++)
-	    {
- 		    for(int j = 0; j < n; j++)
-		    {
-			    res[i][j] = t[i][j];
-		    }
-	    } 	
-	}
-}
-
-void output(long long a[100][100], int n) 
-{ 
-  cout << "\n    ";
-  for(int i = 0; i < n; i++)
-  {
-	  cout << i << "  ";
-  }
-  cout << "\n";
-  cout << "\n";
-  for(int i = 0; i < n; i++)
-  {
-	  cout << i << "  ";
-	  for(int j = 0; j < n; j++)
-	  {
-		  cout << " "<< a[i][j] << " ";
-	  }
-	  cout << "\n";
-  }	
 }

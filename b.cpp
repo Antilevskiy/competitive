@@ -32,25 +32,25 @@ int main()
   cin >> u >> v;
   u--; v--;	
   weight[u] = 0;
-  
-  while(true)
+  int counter = 0;
+  while(counter < n)
   {
 	  unsigned long long min = 1000000000000;
-	  int counter = 0;
+	  counter++;
 	  int index_min = -1;
-	  for(int i = 0; i < n; i++)
-	  {
-		  if(visited[i])
-		  {
-			  counter++;
-		  }  
-	  }
-	  if(counter == n)
-	  {
-		  break;
-	  }
-	  else
-	  {
+	  //for(int i = 0; i < n; i++)
+	  //{
+		  //if(visited[i])
+		  //{
+			  //counter++;
+		  //}  
+	  //}
+	  //if(counter == n)
+	  //{
+		  //break;
+	  //}
+	  //else
+	  //{
 		  for(int i = 0; i < n; i++)
 		  {
 			  if((weight[i] < min) && !visited[i])
@@ -67,7 +67,7 @@ int main()
 			  }
 		  }
 		  visited[index_min] = 1;
-	  }
+	  //}
   }
   cout << weight[v];
   return 0;
