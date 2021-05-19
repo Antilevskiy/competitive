@@ -1,9 +1,17 @@
+in
 a
 b
 brute1
 brute2
 outputInitial
-
+a.cpp
+b.cpp
+brute1.cpp
+brute2.cpp
+outputInitial.cpp
+test
+Relief_mest
+task22
 
 # Prerequisites
 *.d
